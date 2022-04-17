@@ -26,51 +26,50 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.imageName = void 0;
 var express_1 = __importDefault(require("express"));
 var fs = __importStar(require("fs"));
 var sharp_1 = __importDefault(require("sharp"));
+var path_1 = __importDefault(require("path")); // to change the pathes to absolute pathes
 var app = (0, express_1.default)();
 var port = 3000;
 app.get('/', function (req, res) {
     res.send('hello');
 });
-var imageName;
-exports.imageName = imageName;
 var name;
 var width;
 var height;
-app.get(['/images', 'images'], function (req, res) {
+var fullName;
+app.get('/images', function (req, res) {
     // getting data from the request query
-    exports.imageName = imageName = req.query;
     name = req.query.name;
     width = req.query.width;
     height = req.query.height;
-    var displayPath = "C:\\Users\\Administrator\\Documents\\GitHub\\image-prossecing-api\\dist\\cash";
+    fullName = "".concat(name, "_").concat(width, "_").concat(height, ".jpg");
+    var displayPath = "dist\\cash";
     var sourcePath = "src\\images";
     try {
         // checking if the image already exists
-        if (fs.existsSync("dist\\cash\\".concat(name)) == true) {
-            res.sendFile("dist\\cash\\".concat(name));
+        if (fs.existsSync("".concat(displayPath, "\\").concat(fullName))) {
+            res.sendFile("".concat(path_1.default.resolve(displayPath), "\\").concat(fullName));
         }
         else if (fs.existsSync("".concat(sourcePath, "\\").concat(name)) == true) {
             // resizing the new image and saving it in the cash file
             (0, sharp_1.default)("".concat(sourcePath, "\\").concat(name))
                 .resize(parseInt(width), parseInt(height))
                 .jpeg()
-                .toFile("".concat(displayPath, "\\").concat(name, "_").concat(width, "_").concat(height, ".jpg"));
+                .toFile("".concat(path_1.default.resolve(displayPath), "\\").concat(fullName));
             setTimeout(function () {
-                res.sendFile("".concat(displayPath, "\\").concat(name, "_").concat(width, "_").concat(height, ".jpg"));
+                res.sendFile("".concat(path_1.default.resolve(displayPath), "\\").concat(fullName));
             }, 500);
         }
         else {
-            // if the image is not found in the src folder
+            // if the image is not found in the src/images folder
             res.send("this image : '" + name + "' is not found");
         }
     }
     catch (err) {
         res.send("the error is ".concat(err));
-        // console.error(err)
+        console.error(err);
     }
 });
 app.listen(port, function () {
