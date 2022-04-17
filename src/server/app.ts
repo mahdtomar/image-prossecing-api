@@ -22,27 +22,27 @@ app.get('/images', (req, res) => {
     fullName = `${name}_${width}_${height}.jpg`;
     const displayPath = `dist\\cash`;
     const sourcePath = `src\\images`;
-    try {
-        // checking if the image already exists
-        if (fs.existsSync(`${displayPath}\\${fullName}`)) {
-            res.sendFile(`${path.resolve(displayPath)}\\${fullName}`);
-        } else if (fs.existsSync(`${sourcePath}\\${name}`) == true) {
-            // resizing the new image and saving it in the cash file
-            sharp(`${sourcePath}\\${name}`)
-                .resize(parseInt(width), parseInt(height))
-                .jpeg()
-                .toFile(`${path.resolve(displayPath)}\\${fullName}`);
-            setTimeout(() => {
+    // function to resize the images 
+    async function prossesimage() {
+        try {
+            if (fs.existsSync(`${displayPath}\\${fullName}`)) {
                 res.sendFile(`${path.resolve(displayPath)}\\${fullName}`);
-            }, 500);
-        } else {
-            // if the image is not found in the src/images folder
-            res.send("this image : '" + name + "' is not found");
+            } else if (fs.existsSync(`${sourcePath}\\${name}`) == true) {
+                // resizing the new image and saving it in the cash file
+                await sharp(`${sourcePath}\\${name}`)
+                    .resize(parseInt(width), parseInt(height))
+                    .jpeg()
+                    .toFile(`${path.resolve(displayPath)}\\${fullName}`);
+                res.sendFile(`${path.resolve(displayPath)}\\${fullName}`);
+            } else {
+                // if the image is not found in the src/images folder
+                res.send("this image : '" + name + "' is not found");
+            }
+        } catch (err) {
+            console.error(err);
         }
-    } catch (err) {
-        res.send(`the error is ${err}`);
-        console.error(err);
     }
+    prossesimage();
 });
 
 app.listen(port, () => {
