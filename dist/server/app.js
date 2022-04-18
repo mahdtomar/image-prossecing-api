@@ -81,8 +81,9 @@ app.get('/images', function (req, res) {
     width = req.query.width;
     height = req.query.height;
     fullName = "".concat(name, "_").concat(width, "_").concat(height, ".jpg");
-    var displayPath = "dist\\cash";
+    var displayPath = "dist\\cashe";
     var sourcePath = "src\\images";
+    // function to resize the images
     function prossesimage() {
         return __awaiter(this, void 0, void 0, function () {
             var err_1;
@@ -95,13 +96,13 @@ app.get('/images', function (req, res) {
                         return [3 /*break*/, 4];
                     case 1:
                         if (!(fs.existsSync("".concat(sourcePath, "\\").concat(name)) == true)) return [3 /*break*/, 3];
-                        // resizing the new image and saving it in the cash file
+                        // resizing the new image and saving it in the cashe file
                         return [4 /*yield*/, (0, sharp_1.default)("".concat(sourcePath, "\\").concat(name))
                                 .resize(parseInt(width), parseInt(height))
                                 .jpeg()
                                 .toFile("".concat(path_1.default.resolve(displayPath), "\\").concat(fullName))];
                     case 2:
-                        // resizing the new image and saving it in the cash file
+                        // resizing the new image and saving it in the cashe file
                         _a.sent();
                         res.sendFile("".concat(path_1.default.resolve(displayPath), "\\").concat(fullName));
                         return [3 /*break*/, 4];
@@ -124,3 +125,4 @@ app.get('/images', function (req, res) {
 app.listen(port, function () {
     console.log("server is running on port".concat(port));
 });
+exports.default = app;

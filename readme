@@ -1,0 +1,25 @@
+the source code is in the "src" folder 
+
+the tests folder is "tests" inside of "src" folder (appSpec.ts)
+
+the name of the server is app.ts inside of the server folder 
+
+the resized images are stored inside of the "cashe" folder in "dist"
+
+the endpoint to resizing images is /images?name=name&width=width&height=height
+example : http://localhost:3000/images?name=two.jpg&width=100&height=100
+
+the testing images are in images folder and the names are 
+1- one.jpg
+2- two.jpg
+3- three.jpg
+
+the scripts are :
+- npm run build to build the typescript files  
+- npm run test for testing with jasmine 
+- npm run prettier for running prettier 
+- npm run lint for running eslint 
+- npm run start to start the server 
+
+
+
