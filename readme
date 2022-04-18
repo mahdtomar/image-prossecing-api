@@ -22,4 +22,4 @@ the scripts are :
 - npm run start to start the server 
 
 
-
+note ( i have used "path" debendency to solve an error for res.sendFile since it needs an absolute path )
