@@ -22,7 +22,7 @@ app.get('/images', (req, res) => {
     fullName = `${name}_${width}_${height}.jpg`;
     const displayPath = `dist\\cash`;
     const sourcePath = `src\\images`;
-    // function to resize the images 
+    // function to resize the images
     async function prossesimage() {
         try {
             if (fs.existsSync(`${displayPath}\\${fullName}`)) {
