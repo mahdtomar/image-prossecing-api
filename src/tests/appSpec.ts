@@ -18,7 +18,7 @@ describe('testing the api endpoint ', () => {
     });
 });
 describe('resizing function ', () => {
-    it('should send image not found if the image isnt in the source folder', async () => {
+    it('should send "image not found" if the image isnt in the source folder', async () => {
         const response = await request.get(
             'images?name=one.jpg&width=234&height=100'
         );

@@ -71,7 +71,7 @@ describe('testing the api endpoint ', function () {
     }); });
 });
 describe('resizing function ', function () {
-    it('should send image not found if the image isnt in the source folder', function () { return __awaiter(void 0, void 0, void 0, function () {
+    it('should send "image not found if" the image isnt in the source folder', function () { return __awaiter(void 0, void 0, void 0, function () {
         var response;
         return __generator(this, function (_a) {
             switch (_a.label) {
