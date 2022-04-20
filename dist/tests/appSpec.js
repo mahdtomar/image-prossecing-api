@@ -70,17 +70,3 @@ describe('testing the api endpoint ', function () {
         });
     }); });
 });
-describe('resizing function ', function () {
-    it('should send image not found if the image isnt in the source folder', function () { return __awaiter(void 0, void 0, void 0, function () {
-        var response;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, request.get('images?name=one.jpg&width=234&height=100')];
-                case 1:
-                    response = _a.sent();
-                    expect(response.status).toBe(305);
-                    return [2 /*return*/];
-            }
-        });
-    }); });
-});

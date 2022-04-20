@@ -4,7 +4,7 @@ the tests folder is "tests" inside of "src" folder (appSpec.ts)
 
 the name of the server is app.ts inside of the server folder 
 
-the resized images are stored inside of the "cashe" folder in "dist"
+the resized images are stored inside of the "cashe"
 
 the endpoint to resizing images is /images?name=name&width=width&height=height
 example : http://localhost:3000/images?name=two.jpg&width=100&height=100
