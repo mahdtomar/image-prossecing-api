@@ -68,6 +68,50 @@ var fs = __importStar(require("fs"));
 var sharp_1 = __importDefault(require("sharp"));
 var path_1 = __importDefault(require("path"));
 var images = express_1.default.Router();
+function prossesimage(name, width, height, req, res, fullName, outputPath, sourcePath, valid) {
+    return __awaiter(this, void 0, void 0, function () {
+        var err_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    if (!(valid === true)) return [3 /*break*/, 8];
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 6, , 7]);
+                    if (!fs.existsSync("".concat(outputPath, "/").concat(fullName))) return [3 /*break*/, 2];
+                    res.sendFile("".concat(path_1.default.resolve(outputPath), "/").concat(fullName));
+                    return [3 /*break*/, 5];
+                case 2:
+                    if (!(fs.existsSync("".concat(sourcePath, "/").concat(name)) == true)) return [3 /*break*/, 4];
+                    // resizing the new image and saving it in the cashe folder
+                    return [4 /*yield*/, (0, sharp_1.default)("".concat(sourcePath, "/").concat(name))
+                            .resize(width, height)
+                            .jpeg()
+                            .toFile("".concat(path_1.default.resolve(outputPath), "/").concat(fullName))];
+                case 3:
+                    // resizing the new image and saving it in the cashe folder
+                    _a.sent();
+                    res.sendFile("".concat(path_1.default.resolve(outputPath), "/").concat(fullName));
+                    return [3 /*break*/, 5];
+                case 4:
+                    // if the image is not found in the src/images folder
+                    res.send("this image : '" + name + "' is not found");
+                    _a.label = 5;
+                case 5: return [3 /*break*/, 7];
+                case 6:
+                    err_1 = _a.sent();
+                    console.error(err_1);
+                    return [3 /*break*/, 7];
+                case 7: return [3 /*break*/, 9];
+                case 8:
+                    res.send('invalid input : width and height MUST be numbers');
+                    _a.label = 9;
+                case 9: return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.prossesimage = prossesimage;
 images.get('/', function (req, res) {
     // getting data from the request query
     var name = req.query.name;
@@ -75,51 +119,15 @@ images.get('/', function (req, res) {
     var height = req.query.height;
     var fullName = "".concat(name, "_").concat(width, "_").concat(height, ".jpg");
     var outputPath = "cashe";
-    var sourcePath = "src/images";
-    // validating the inputs
+    var sourcePath = path_1.default.join('src', 'images');
+    var valid;
+    // validating the input
     if (parseInt(height) && parseInt(width)) {
-        prossesimage(name, parseInt(width), parseInt(height), req, res, fullName, outputPath, sourcePath);
+        valid = true;
     }
     else {
-        res.send('invalid input : width and height MUST be numbers');
+        valid = false;
     }
+    prossesimage(name, parseInt(width), parseInt(height), req, res, fullName, outputPath, sourcePath, valid);
 });
-function prossesimage(name, width, height, req, res, fullName, outputPath, sourcePath) {
-    return __awaiter(this, void 0, void 0, function () {
-        var err_1;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    _a.trys.push([0, 5, , 6]);
-                    if (!fs.existsSync("".concat(outputPath, "/").concat(fullName))) return [3 /*break*/, 1];
-                    res.sendFile("".concat(path_1.default.resolve(outputPath), "/").concat(fullName));
-                    return [3 /*break*/, 4];
-                case 1:
-                    if (!(fs.existsSync("".concat(sourcePath, "/").concat(name)) == true)) return [3 /*break*/, 3];
-                    // resizing the new image and saving it in the cashe folder
-                    return [4 /*yield*/, (0, sharp_1.default)("".concat(sourcePath, "/").concat(name))
-                            .resize(width, height)
-                            .jpeg()
-                            .toFile("".concat(path_1.default.resolve(outputPath), "/").concat(fullName))];
-                case 2:
-                    // resizing the new image and saving it in the cashe folder
-                    _a.sent();
-                    res.sendFile("".concat(path_1.default.resolve(outputPath), "/").concat(fullName));
-                    return [3 /*break*/, 4];
-                case 3:
-                    // if the image is not found in the src/images folder
-                    res.status(305);
-                    res.send("this image : '" + name + "' is not found");
-                    _a.label = 4;
-                case 4: return [3 /*break*/, 6];
-                case 5:
-                    err_1 = _a.sent();
-                    console.error(err_1);
-                    return [3 /*break*/, 6];
-                case 6: return [2 /*return*/];
-            }
-        });
-    });
-}
-exports.prossesimage = prossesimage;
 exports.default = images;
