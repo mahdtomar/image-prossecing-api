@@ -1,4 +1,27 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -41,6 +64,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var supertest_1 = __importDefault(require("supertest"));
 var app_1 = __importDefault(require("../server/app"));
+var resizing_1 = require("../resizing");
+var fs = __importStar(require("fs"));
+var path_1 = __importDefault(require("path"));
 var request = (0, supertest_1.default)(app_1.default);
 describe('testing the server', function () {
     it('should return status of 200', function () { return __awaiter(void 0, void 0, void 0, function () {
@@ -56,12 +82,12 @@ describe('testing the server', function () {
         });
     }); });
 });
-describe('testing the api endpoint ', function () {
+describe('testing the endpoint', function () {
     it('should return status of 200', function () { return __awaiter(void 0, void 0, void 0, function () {
         var response;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, request.get('/images')];
+                case 0: return [4 /*yield*/, request.get('/')];
                 case 1:
                     response = _a.sent();
                     expect(response.status).toBe(200);
@@ -69,4 +95,17 @@ describe('testing the api endpoint ', function () {
             }
         });
     }); });
+});
+describe('testing the resizing function', function () {
+    // name: string,
+    // width: number,
+    // height: number,
+    // fullName: string,
+    // outputPath: string,
+    // sourcePath: string,
+    // valid: boolean
+    (0, resizing_1.prossesimage)('one.jpg', 345, 345, 'one.jpg_345_345.jpg', 'cashe', 'src/images', true);
+    it('should resize the image and save it in the cashe folder', function () {
+        expect(fs.existsSync(path_1.default.resolve(path_1.default.join('cashe', 'one.jpg_345_345.jpg')))).toBe(true);
+    });
 });

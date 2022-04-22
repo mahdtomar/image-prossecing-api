@@ -62,54 +62,38 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var express_1 = __importDefault(require("express"));
+exports.prossesimage = void 0;
 var fs = __importStar(require("fs"));
+var sharp_1 = __importDefault(require("sharp"));
 var path_1 = __importDefault(require("path"));
-var resizing_1 = require("../../resizing");
-var images = express_1.default.Router();
-images.get('/', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var name, width, height, fullName, outputPath, sourcePath, valid;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                name = req.query.name;
-                width = req.query.width;
-                height = req.query.height;
-                fullName = "".concat(name, "_").concat(width, "_").concat(height, ".jpg");
-                outputPath = "cashe";
-                sourcePath = path_1.default.join('src', 'images');
-                // validating the input
-                if (parseInt(width) > 0 && parseInt(height) > 0) {
-                    valid = true;
-                }
-                else {
-                    valid = false;
-                    res.send("invalid input: width and height must be numbers and above 0 ");
-                }
-                if (!fs.existsSync("".concat(outputPath, "/").concat(fullName))) return [3 /*break*/, 1];
-                // sending the image from the cashe file
-                res.sendFile(path_1.default.join(path_1.default.resolve(outputPath), fullName));
-                return [3 /*break*/, 4];
-            case 1:
-                if (!fs.existsSync(path_1.default.join(sourcePath, name))) return [3 /*break*/, 3];
-                // resizing the image if it exists in the source folder then displaying it
-                return [4 /*yield*/, (0, resizing_1.prossesimage)(name, parseInt(width), parseInt(height), fullName, outputPath, sourcePath, valid)];
-            case 2:
-                // resizing the image if it exists in the source folder then displaying it
-                _a.sent();
-                res.sendFile(path_1.default.resolve(path_1.default.join(outputPath, fullName)));
-                return [3 /*break*/, 4];
-            case 3:
-                if (fs.existsSync("".concat(sourcePath, "/").concat(name)) == false) {
-                    // if the image doesn't exist in the source folder
-                    res.send("sorry this image \"".concat(name, "\" doesn't exist in the source folder"));
-                }
-                else {
-                    res.send("couldn't resize the image");
-                }
-                _a.label = 4;
-            case 4: return [2 /*return*/];
-        }
+function prossesimage(name, width, height, fullName, outputPath, sourcePath, valid) {
+    return __awaiter(this, void 0, void 0, function () {
+        var err_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    if (!(valid === true)) return [3 /*break*/, 5];
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 4, , 5]);
+                    if (!(fs.existsSync("".concat(outputPath, "/").concat(fullName)) == false)) return [3 /*break*/, 3];
+                    // resizing the new image and saving it in the cashe folder
+                    return [4 /*yield*/, (0, sharp_1.default)("".concat(sourcePath, "/").concat(name))
+                            .resize(width, height)
+                            .jpeg()
+                            .toFile("".concat(path_1.default.resolve(outputPath), "/").concat(fullName))];
+                case 2:
+                    // resizing the new image and saving it in the cashe folder
+                    _a.sent();
+                    _a.label = 3;
+                case 3: return [3 /*break*/, 5];
+                case 4:
+                    err_1 = _a.sent();
+                    console.error(err_1);
+                    return [3 /*break*/, 5];
+                case 5: return [2 /*return*/];
+            }
+        });
     });
-}); });
-exports.default = images;
+}
+exports.prossesimage = prossesimage;
